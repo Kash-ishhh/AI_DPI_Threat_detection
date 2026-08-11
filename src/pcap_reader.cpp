@@ -52,11 +52,37 @@ int main() {
             << std::dec;
 
         if (ether_type == 0x0800) {
-            std::cout << " (IPv4)";
-        }
-        else if (ether_type == 0x86DD) {
-            std::cout << " (IPv6)";
-        }
+    std::cout << " (IPv4)";
+}
+else if (ether_type == 0x86DD) {
+    std::cout << " (IPv6)";
+
+    if (header->caplen >= 54) {
+
+        char source[INET6_ADDRSTRLEN];
+        char destination[INET6_ADDRSTRLEN];
+
+        inet_ntop(
+            AF_INET6,
+            packet + 22,
+            source,
+            INET6_ADDRSTRLEN
+        );
+
+        inet_ntop(
+            AF_INET6,
+            packet + 38,
+            destination,
+            INET6_ADDRSTRLEN
+        );
+
+        std::cout << "\n  Source IPv6: "
+                  << source;
+
+        std::cout << "\n  Destination IPv6: "
+                  << destination;
+    }
+}
         else if (ether_type == 0x0806) {
             std::cout << " (ARP)";
         }
